@@ -30,7 +30,10 @@
             </tr>
             <c:forEach var="person" items="${persons}">
                 <tr>
-                    <td>${person.value.employeeID}</td>
+                    <td>
+                        <!-- Creates a link to each employee's info using my API controller -->
+                        <a href="API/employees/${person.value.employeeID}">${person.value.employeeID}</a>
+                    </td>
                     <td>${person.value.firstName} ${person.value.middleName}  ${person.value.lastName}</td>
                     <td>${person.value.hireDate}</td>
                     <!-- Instead of using c:choose and using getClass(), I chose to create methods in each class that returns 
