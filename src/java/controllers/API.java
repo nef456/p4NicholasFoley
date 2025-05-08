@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import business.EmpHourly;
 import business.Person;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -89,12 +90,29 @@ public class API extends HttpServlet {
 
             } else if ("hourly".equals(parts[3]) && parts.length == 4) {
                 LinkedHashMap<Integer, Person> hourly = PersonDA.selectAll();
-                System.out.println(hourly.values());
-                
-                if(hourly.values().equals("EmpHourly")){
-                json = gson.toJson(hourly);
-                } else{
-                    json = "{\"message\": \"No Hourly Employees\"}";
+
+                //Only do this if Hourly
+                for (Person person : hourly.values()) {
+                    if (person.getEmployeeType().equals("Hourly")) {
+                        json += gson.toJson(person);
+                    } else if (!person.getEmployeeType().equals("Hourly")) {
+                        json = "{\"message\": \"No Hourly Employees\"}";
+                        /*This is how I figured out what I needed to iterate through
+                        I kept hitting this check, so i fumbled around until I figured out the type.
+                        This adds the null and None types as well and not sure how to get rid of that
+                        but this works for now.*/
+                        System.out.println(person.getEmployeeType());
+
+                    }
+                }
+
+            } else if ("salaried".equals(parts[3]) && parts.length == 4) {
+                LinkedHashMap<Integer, Person> salary = PersonDA.selectAll();
+
+                for (Person person : salary.values()) {
+                    if (person.getEmployeeType().equals("Salary")) {
+                        json += gson.toJson(person);
+                    }
                 }
             }
 
